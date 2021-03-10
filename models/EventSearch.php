@@ -4,12 +4,12 @@ namespace app\models;
 
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\models\Country;
+use app\models\Event;
 
 /**
- * CountrySearch represents the model behind the search form of `app\models\Country`.
+ * EventSearch represents the model behind the search form of `app\models\Event`.
  */
-class CountrySearch extends Country
+class EventSearch extends Event
 {
     /**
      * {@inheritdoc}
@@ -17,8 +17,8 @@ class CountrySearch extends Country
     public function rules()
     {
         return [
-            [['code', 'name'], 'safe'],
-            [['population'], 'integer'],
+            [['id', 'eventIdInScada', 'objectId', 'priorityNumber'], 'integer'],
+            [['technicalDescription', 'objectDescription', 'eventRegistrationTime'], 'safe'],
         ];
     }
 
@@ -40,7 +40,7 @@ class CountrySearch extends Country
      */
     public function search($params)
     {
-        $query = Country::find();
+        $query = Event::find();
 
         // add conditions that should always apply here
 
@@ -58,11 +58,15 @@ class CountrySearch extends Country
 
         // grid filtering conditions
         $query->andFilterWhere([
-            'population' => $this->population,
+            'id' => $this->id,
+            'eventIdInScada' => $this->eventIdInScada,
+            'objectId' => $this->objectId,
+            'priorityNumber' => $this->priorityNumber,
+            'eventRegistrationTime' => $this->eventRegistrationTime,
         ]);
 
-        $query->andFilterWhere(['like', 'code', $this->code])
-            ->andFilterWhere(['like', 'name', $this->name]);
+        $query->andFilterWhere(['like', 'technicalDescription', $this->technicalDescription])
+            ->andFilterWhere(['like', 'objectDescription', $this->objectDescription]);
 
         return $dataProvider;
     }
