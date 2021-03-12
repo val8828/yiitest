@@ -151,8 +151,10 @@ class EventController extends Controller
         $rows = Event::find()
             ->where(['<=','eventRegistrationTime',$newDate])
             ->all();
+        $rows['count'] = count($rows);
         $response = Yii::$app->response;
         $response->format = \yii\web\Response::FORMAT_JSON;
         $response->data = $rows;
+        
     }
 }
